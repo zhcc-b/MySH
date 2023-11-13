@@ -28,7 +28,3 @@ The project likely includes custom command handling, input/output operations, an
 
 ### Note
 For specific details about each module and its functions, refer to the comments in the respective files.
-
----
-
-This README provides a basic overview of your project, its structure, and how to build and use it. You may need to add more details specific to your project's functionality and any dependencies it may have.
