@@ -46,7 +46,7 @@ mysh$ start-client 8080 127.0.0.1
 ```
 
 ### Technologies & System Calls Used  
-- **C Programming** (POSIX-compliant)  
+- **C Programming**  
 - **System Calls**: `fork()`, `execvp()`, `waitpid()`, `pipe()`, `dup2()`, `kill()`, `sigaction()`  
 - **Networking**: `socket()`, `bind()`, `listen()`, `accept()`, `connect()`  
 - **Process Management**: Background processes, job control (`ps`, `kill`)  
