@@ -46,18 +46,58 @@ mysh$ start-client 8080 127.0.0.1
 ```
 
 ```sh
-def printObjectNicely(obj):
-    count = 1
-    if isinstance(obj, list):
-        for i in obj:
-            name = id_name_map.get(i.ID, f"Unknown ID: {i.ID}")
-            print(f"\tBLOCK_{count} : Name = {name}")
-            print(f"\tPosition: x={i.x}, y={i.y}, width={i.width}, height={i.height}\n")
-            count += 1
-    else:
-        name = id_name_map.get(obj.ID, f"Unknown ID: {obj.ID}")
-        print(f"\tBLOCK_{count} : Name = {name}")
-        print(f"\tPosition: x={obj.x}, y={obj.y}, width={obj.width}, height={obj.height}\n")
+import time
+from huskylib import HuskyLensLibrary
+from pubnub.pubnub import PubNub
+from pubnub.pnconfiguration import PNConfiguration
+
+# ID → Name mapping
+id_name_map = {
+    1: "Alice",
+    2: "Bob",
+    3: "Charlie"
+}
+
+# Initialize Huskylens (I2C)
+hl = HuskyLensLibrary("I2C", "", address=0x32)
+
+# Setup PubNub configuration
+pnconfig = PNConfiguration()
+pnconfig.subscribe_key = "sub-c-600de055-e08b-4dfd-8f69-231ee45b2313"
+pnconfig.publish_key = "pub-c-cc09a5e0-ae7e-4f0b-91ba-3c06deac8056"
+pnconfig.uuid = "z728"
+
+pubnub = PubNub(pnconfig)
+channel = "zhaox207"
+
+def publish_result(name):
+    message = {"recognized_name": name}
+    pubnub.publish().channel(channel).message(message).sync()
+    print(f"Published to PubNub: {message}")
+
+def main():
+    print("Starting Huskylens → PubNub recognition loop. Press Ctrl+C to stop.")
+    while True:
+        try:
+            hl.request()
+            if hl.available():
+                blocks = hl.learned_blocks()
+                for block in blocks:
+                    name = id_name_map.get(block.ID, f"Unknown ID: {block.ID}")
+                    print(f"Detected: {name}")
+                    publish_result(name)
+            else:
+                print("No object detected.")
+            time.sleep(1)
+        except KeyboardInterrupt:
+            print("Program stopped by user.")
+            break
+        except Exception as e:
+            print(f"Error: {e}")
+
+if __name__ == "__main__":
+    main()
+
 ```
 
 ### Technologies & System Calls Used  
