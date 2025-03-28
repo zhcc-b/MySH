@@ -45,6 +45,21 @@ mysh$ start-server 8080
 mysh$ start-client 8080 127.0.0.1
 ```
 
+```sh
+def printObjectNicely(obj):
+    count = 1
+    if isinstance(obj, list):
+        for i in obj:
+            name = id_name_map.get(i.ID, f"Unknown ID: {i.ID}")
+            print(f"\tBLOCK_{count} : Name = {name}")
+            print(f"\tPosition: x={i.x}, y={i.y}, width={i.width}, height={i.height}\n")
+            count += 1
+    else:
+        name = id_name_map.get(obj.ID, f"Unknown ID: {obj.ID}")
+        print(f"\tBLOCK_{count} : Name = {name}")
+        print(f"\tPosition: x={obj.x}, y={obj.y}, width={obj.width}, height={obj.height}\n")
+```
+
 ### Technologies & System Calls Used  
 - **C Programming**  
 - **System Calls**: `fork()`, `execvp()`, `waitpid()`, `pipe()`, `dup2()`, `kill()`, `sigaction()`  
